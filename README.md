@@ -42,8 +42,9 @@ python onenote_export.py --outdir /path/to/outdir
 ```
 
 To download only a subset of your notes, use the `--select` option:
+
 ```bash
-# Download one notebook
+# Download one notebook - there might be an issue if you have spaces in the notebook name
 python onenote_export.py --select 'mynotebook'
 # All matrix-related notes in the 'Linear Algebra' section of the 'Math' notebook.
 python onenote_export.py --select 'math/linear algebra/*matrix*'
