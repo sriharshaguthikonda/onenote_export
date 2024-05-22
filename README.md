@@ -11,7 +11,7 @@ authority_url = 'https://login.microsoftonline.com/common'
 
 ## Setup
 In order to run the script, you must first do the following:
-1. Clone the repo using `git clone https://github.com/Danmou/onenote_export.git`
+1. Clone the repo using `git clone https://github.com/sriharshaguthikonda/onenote_export.git`
 2. Go to https://aad.portal.azure.com/ and log in with your Microsoft account.
     #this step might not be easy anymore - it might ask you to do things. there might be guides 
 4. Select "Azure Active Directory" and then "App registrations" under "Manage".
