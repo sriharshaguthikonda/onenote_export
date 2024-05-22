@@ -17,7 +17,7 @@ from pathvalidate import sanitize_filename
 from requests_oauthlib import OAuth2Session
 
 graph_url = 'https://graph.microsoft.com/v1.0'
-authority_url = 'https://login.microsoftonline.com/common'
+authority_url = 'https://login.microsoftonline.com/consumers'
 scopes = ['Notes.Read', 'Notes.Read.All']
 redirect_uri = 'http://localhost:5000/getToken'
 
@@ -46,8 +46,7 @@ def main():
 def login():
     auth_state = str(uuid.uuid4())
     flask.session['state'] = auth_state
-    authorization_url = application.get_authorization_request_url(scopes, state=auth_state,
-                                                                  redirect_uri=redirect_uri)
+    authorization_url = application.get_authorization_request_url(scopes, state=auth_state, redirect_uri=redirect_uri)
     resp = flask.Response(status=307)
     resp.headers['location'] = authorization_url
     return resp
@@ -72,7 +71,7 @@ def get(graph_client, url, params=None, indent=0):
             # We are being throttled due to too many requests.
             # See https://docs.microsoft.com/en-us/graph/throttling
             indent_print(indent, 'Too many requests, waiting 20s and trying again.')
-            time.sleep(20)
+            time.sleep(320)
         elif resp.status_code == 500:
             # In my case, one specific note page consistently gave this status
             # code when trying to get the content. The error was "19999:
@@ -101,13 +100,26 @@ def download_attachments(graph_client, content, out_dir, indent=0):
         return ElementTree.tostring(element, encoding='unicode')
 
     def download_image(tag_match):
-        # <img width="843" height="218.5" src="..." data-src-type="image/png" data-fullres-src="..."
-        # data-fullres-src-type="image/png" />
         parser = MyHTMLParser()
         parser.feed(tag_match[0])
         props = parser.attrs
-        image_url = props.get('data-fullres-src', props['src'])
-        image_type = props.get('data-fullres-src-type', props['data-src-type']).split("/")[-1]
+
+        if 'src' not in props and 'data-fullres-src' not in props:
+            log_file_path = image_dir / "problematic_images.txt"
+            error_message = f"Error: Image tag without src or data-fullres-src attribute found. Tag: {tag_match[0]}"
+            
+            if not image_dir.exists():
+                image_dir.mkdir(parents=True)
+            
+            # Write the error message to the log file
+            with open(log_file_path, "a", encoding='utf-8') as log_file:
+                log_file.write(error_message + "\n")
+            
+            indent_print(indent, error_message)
+            return tag_match[0]
+
+        image_url = props.get('data-fullres-src', props.get('src'))
+        image_type = props.get('data-fullres-src-type', props.get('data-src-type', 'image/jpeg')).split("/")[-1]
         file_name = ''.join(random.choice(string.ascii_lowercase) for _ in range(10)) + '.' + image_type
         req = get(graph_client, image_url, indent=indent)
         if req is None:
@@ -120,6 +132,7 @@ def download_attachments(graph_client, content, out_dir, indent=0):
         props['src'] = "images/" + file_name
         props = {k: v for k, v in props.items() if 'data-fullres-src' not in k}
         return generate_html('img', props)
+
 
     def download_attachment(tag_match):
         # <object data-attachment="Trig_Cheat_Sheet.pdf" type="application/pdf" data="..."
@@ -221,6 +234,7 @@ def download_page(graph_client, page_url, path, indent=0):
     response = get(graph_client, page_url, indent=indent)
     if response is not None:
         content = response.text
+        print(content)
         indent_print(indent, f'Got content of length {len(content)}')
         content = download_attachments(graph_client, content, path, indent=indent)
         with open(out_html, "w", encoding='utf-8') as f:
