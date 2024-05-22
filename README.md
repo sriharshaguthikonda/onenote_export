@@ -1,4 +1,6 @@
-This Python script exports all the OneNote notebooks linked to your Microsoft account to HTML files.
+this fork adds a log file if there are issue with image the file is named "problematic_images.txt"
+
+ This Python script exports all the OneNote notebooks linked to your Microsoft account to HTML files.
 
 ## Setup
 In order to run the script, you must first do the following:
