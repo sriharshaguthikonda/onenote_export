@@ -1,4 +1,4 @@
-##Changes
+## Changes
 this fork adds a log file if there are issue with image the file is named "problematic_images.txt"
 sleep timme changed to 320 secs when "too many requests" error occurs! 
 
@@ -13,7 +13,7 @@ authority_url = 'https://login.microsoftonline.com/common'
 In order to run the script, you must first do the following:
 1. Clone the repo using `git clone https://github.com/sriharshaguthikonda/onenote_export.git`
 2. Go to https://aad.portal.azure.com/ and log in with your Microsoft account.
-    #this step might not be easy anymore - it might ask you to do things. there might be guides 
+    # this step might not be easy anymore - it might ask you to do things. there might be guides 
 4. Select "Azure Active Directory" and then "App registrations" under "Manage".
 5. Select "New registration". Choose any name, set "Supported account types" to "Accounts in any 
    organizational directory and personal Microsoft accounts" and under "Redirect URI", select Web 
