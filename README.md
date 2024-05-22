@@ -1,4 +1,5 @@
 this fork adds a log file if there are issue with image the file is named "problematic_images.txt"
+sleep timme changed to 320 secs when "too many requests" error occurs! 
 
  This Python script exports all the OneNote notebooks linked to your Microsoft account to HTML files.
 
