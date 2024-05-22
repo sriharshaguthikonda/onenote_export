@@ -1,5 +1,11 @@
+##Changes
 this fork adds a log file if there are issue with image the file is named "problematic_images.txt"
 sleep timme changed to 320 secs when "too many requests" error occurs! 
+
+authority_url = 'https://login.microsoftonline.com/consumers'
+this was also changed from 
+authority_url = 'https://login.microsoftonline.com/common'
+
 
  This Python script exports all the OneNote notebooks linked to your Microsoft account to HTML files.
 
@@ -7,18 +13,19 @@ sleep timme changed to 320 secs when "too many requests" error occurs!
 In order to run the script, you must first do the following:
 1. Clone the repo using `git clone https://github.com/Danmou/onenote_export.git`
 2. Go to https://aad.portal.azure.com/ and log in with your Microsoft account.
-3. Select "Azure Active Directory" and then "App registrations" under "Manage".
-4. Select "New registration". Choose any name, set "Supported account types" to "Accounts in any 
+    #this step might not be easy anymore - it might ask you to do things. there might be guides 
+4. Select "Azure Active Directory" and then "App registrations" under "Manage".
+5. Select "New registration". Choose any name, set "Supported account types" to "Accounts in any 
    organizational directory and personal Microsoft accounts" and under "Redirect URI", select Web 
    and enter `http://localhost:5000/getToken`. Register.
-5. Copy "Application (client) ID" and paste it as `client_id` in `config.yaml`.
-6. Select "Certificates & secrets" under "Manage". Press "New client secret", choose a name and 
+6. Copy "Application (client) ID" and paste it as `client_id` in `config.yaml`.
+7. Select "Certificates & secrets" under "Manage". Press "New client secret", choose a name and 
    confirm.
-7. Copy the client secret and paste it as `secret` in `config.yaml`.
-8. Select "API permissions" under "Manage". Press "Add a permission", scroll down and select OneNote, 
+8. Copy the client secret and paste it as `secret` in `config.yaml`.
+9. Select "API permissions" under "Manage". Press "Add a permission", scroll down and select OneNote, 
    choose "Delegated permissions" and check "Notes.Read" and "Notes.Read.All". Press "Add 
    permissions".
-9. Make sure you have Python 3.7 (or newer) installed and install the dependencies using the command 
+10. Make sure you have Python 3.7 (or newer) installed and install the dependencies using the command 
    `pip install -r requirements.txt`.
 
 ## Running
